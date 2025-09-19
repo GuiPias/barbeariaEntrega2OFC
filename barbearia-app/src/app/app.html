@@ -1,0 +1,12 @@
+<div class="container">
+  <h1>Barbearia</h1>
+  <p>Bem-vindo! Escolha uma opção:</p>
+
+  <nav>
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Início</a>
+    <a routerLink="/clientes" routerLinkActive="active">Clientes</a>
+    <a routerLink="/agendamentos" routerLinkActive="active">Agendamentos</a>
+  </nav>
+
+  <router-outlet></router-outlet>
+</div>
