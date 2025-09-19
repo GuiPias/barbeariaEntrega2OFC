@@ -1,12 +1,10 @@
-<div class="container">
+<header class="header">
   <h1>Barbearia</h1>
-  <p>Bem-vindo! Escolha uma opção:</p>
-
   <nav>
-    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Início</a>
-    <a routerLink="/clientes" routerLinkActive="active">Clientes</a>
-    <a routerLink="/agendamentos" routerLinkActive="active">Agendamentos</a>
+    <a routerLink="/" routerLinkActive="active">Início</a>
   </nav>
+</header>
 
+<main class="container">
   <router-outlet></router-outlet>
-</div>
+</main>

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PagInicialComponent } from './pag-inicial';
+import { ServicosComponent } from './servicos';
 
-describe('PagInicialComponent', () => {
-  let component: PagInicialComponent;
-  let fixture: ComponentFixture<PagInicialComponent>;
+describe('ServicosComponent', () => {
+  let component: ServicosComponent;
+  let fixture: ComponentFixture<ServicosComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PagInicialComponent]
+      declarations: [ServicosComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PagInicialComponent);
+    fixture = TestBed.createComponent(ServicosComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
