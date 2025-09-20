@@ -1,44 +1,54 @@
-<h2>Produtos</h2>
+<div class="container">
+  <div class="page-header">
+    <h2>🛍️ Produtos</h2>
+    <button class="btn btn-success" (click)="mostrarFormulario = !mostrarFormulario">
+      {{ mostrarFormulario ? '❌ Cancelar' : '➕ Novo Produto' }}
+    </button>
+  </div>
 
-<div class="produto-actions">
-  <button class="btn-cadastrar" (click)="mostrarFormulario = !mostrarFormulario">
-    {{ mostrarFormulario ? 'Cancelar' : 'Cadastrar Produto' }}
-  </button>
-</div>
+  <div *ngIf="mostrarFormulario" class="card form-card fade-in-up">
+    <h3>{{ editandoProduto ? 'Editar Produto' : 'Cadastrar Novo Produto' }}</h3>
+    <form (ngSubmit)="cadastrarProduto()">
+      <div class="form-group">
+        <label class="form-label" for="nome">Nome:</label>
+        <input class="form-input" type="text" id="nome" name="nome" [(ngModel)]="produto.nome" required>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="descricao">Descrição:</label>
+        <input class="form-input" type="text" id="descricao" name="descricao" [(ngModel)]="produto.descricao" required>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="preco">Preço:</label>
+        <input class="form-input" type="number" id="preco" name="preco" [(ngModel)]="produto.preco" step="0.01" required>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="quantidadeEstoque">Quantidade em Estoque:</label>
+        <input class="form-input" type="number" id="quantidadeEstoque" name="quantidadeEstoque" [(ngModel)]="produto.quantidadeEstoque" required>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">{{ editandoProduto ? '✏️ Atualizar' : '💾 Salvar' }} Produto</button>
+        <button type="button" class="btn btn-secondary" (click)="cancelarEdicao()">❌ Cancelar</button>
+      </div>
+    </form>
+  </div>
 
-<div *ngIf="mostrarFormulario" class="formulario-cadastro">
-  <h3>Cadastrar Novo Produto</h3>
-  <form (ngSubmit)="cadastrarProduto()">
-    <div class="campo">
-      <label for="nome">Nome:</label>
-      <input type="text" id="nome" [(ngModel)]="produto.nome" required>
+  <div class="produtos-grid">
+    <div *ngFor="let p of produtos; let i = index" class="produto-card card fade-in-up">
+      <div class="produto-icon">🛍️</div>
+      <h4>{{ p.nome }}</h4>
+      <div class="produto-info">
+        <p>📝 {{ p.descricao }}</p>
+        <p>💰 R$ {{ p.preco }}</p>
+        <p>📦 {{ p.quantidadeEstoque }} unidades</p>
+      </div>
+      <div class="produto-actions">
+        <button class="btn btn-edit" (click)="editarProduto(i)">✏️ Editar</button>
+        <button class="btn btn-delete" (click)="deletarProduto(i)">🗑️ Deletar</button>
+      </div>
     </div>
-    
-    <div class="campo">
-      <label for="descricao">Descrição:</label>
-      <input type="text" id="descricao" [(ngModel)]="produto.descricao" required>
-    </div>
-    
-    <div class="campo">
-      <label for="preco">Preço:</label>
-      <input type="number" id="preco" [(ngModel)]="produto.preco" step="0.01" required>
-    </div>
-    
-    <div class="campo">
-      <label for="quantidadeEstoque">Quantidade em Estoque:</label>
-      <input type="number" id="quantidadeEstoque" [(ngModel)]="produto.quantidadeEstoque" required>
-    </div>
-    
-    <button type="submit" class="btn-salvar">Salvar</button>
-  </form>
-</div>
-
-<div class="lista-produtos">
-  <h3>Produtos Cadastrados</h3>
-  <div *ngFor="let p of produtos" class="produto-item">
-    <p><strong>Nome:</strong> {{ p.nome }}</p>
-    <p><strong>Descrição:</strong> {{ p.descricao }}</p>
-    <p><strong>Preço:</strong> R$ {{ p.preco }}</p>
-    <p><strong>Estoque:</strong> {{ p.quantidadeEstoque }} unidades</p>
   </div>
 </div>

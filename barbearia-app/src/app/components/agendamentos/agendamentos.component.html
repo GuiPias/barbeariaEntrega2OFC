@@ -7,40 +7,47 @@
   </div>
 
   <div *ngIf="mostrarFormulario" class="card form-card fade-in-up">
-    <h3>Cadastrar Novo Agendamento</h3>
+    <h3>{{ editandoAgendamento ? 'Editar Agendamento' : 'Cadastrar Novo Agendamento' }}</h3>
     <form (ngSubmit)="cadastrarAgendamento()">
       <div class="form-group">
         <label class="form-label" for="cliente">Cliente:</label>
-        <input class="form-input" type="text" id="cliente" [(ngModel)]="agendamento.cliente" required>
+        <input class="form-input" type="text" id="cliente" name="cliente" [(ngModel)]="agendamento.cliente" required>
       </div>
       
       <div class="form-group">
         <label class="form-label" for="servico">Serviço:</label>
-        <input class="form-input" type="text" id="servico" [(ngModel)]="agendamento.servico" required>
+        <input class="form-input" type="text" id="servico" name="servico" [(ngModel)]="agendamento.servico" required>
       </div>
       
       <div class="form-group">
         <label class="form-label" for="data">Data:</label>
-        <input class="form-input" type="date" id="data" [(ngModel)]="agendamento.data" required>
+        <input class="form-input" type="date" id="data" name="data" [(ngModel)]="agendamento.data" required>
       </div>
       
       <div class="form-group">
         <label class="form-label" for="horario">Horário:</label>
-        <input class="form-input" type="time" id="horario" [(ngModel)]="agendamento.horario" required>
+        <input class="form-input" type="time" id="horario" name="horario" [(ngModel)]="agendamento.horario" required>
       </div>
       
-      <button type="submit" class="btn btn-primary">💾 Salvar Agendamento</button>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">{{ editandoAgendamento ? '✏️ Atualizar' : '💾 Salvar' }} Agendamento</button>
+        <button type="button" class="btn btn-secondary" (click)="cancelarEdicao()">❌ Cancelar</button>
+      </div>
     </form>
   </div>
 
   <div class="agendamentos-grid">
-    <div *ngFor="let a of agendamentos" class="agendamento-card card fade-in-up">
+    <div *ngFor="let a of agendamentos; let i = index" class="agendamento-card card fade-in-up">
       <div class="agendamento-icon">📅</div>
       <h4>{{ a.cliente }}</h4>
       <div class="agendamento-info">
         <p>✂️ {{ a.servico }}</p>
         <p>📆 {{ a.data }}</p>
         <p>🕐 {{ a.horario }}</p>
+      </div>
+      <div class="agendamento-actions">
+        <button class="btn btn-edit" (click)="editarAgendamento(i)">✏️ Editar</button>
+        <button class="btn btn-delete" (click)="deletarAgendamento(i)">🗑️ Deletar</button>
       </div>
     </div>
   </div>

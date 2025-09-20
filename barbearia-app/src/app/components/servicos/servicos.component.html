@@ -1,44 +1,54 @@
-<h2>Serviços</h2>
+<div class="container">
+  <div class="page-header">
+    <h2>✂️ Serviços</h2>
+    <button class="btn btn-success" (click)="mostrarFormulario = !mostrarFormulario">
+      {{ mostrarFormulario ? '❌ Cancelar' : '➕ Novo Serviço' }}
+    </button>
+  </div>
 
-<div class="servico-actions">
-  <button class="btn-cadastrar" (click)="mostrarFormulario = !mostrarFormulario">
-    {{ mostrarFormulario ? 'Cancelar' : 'Cadastrar Serviço' }}
-  </button>
-</div>
+  <div *ngIf="mostrarFormulario" class="card form-card fade-in-up">
+    <h3>{{ editandoServico ? 'Editar Serviço' : 'Cadastrar Novo Serviço' }}</h3>
+    <form (ngSubmit)="cadastrarServico()">
+      <div class="form-group">
+        <label class="form-label" for="nome">Nome:</label>
+        <input class="form-input" type="text" id="nome" name="nome" [(ngModel)]="servico.nome" required>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="descricao">Descrição:</label>
+        <input class="form-input" type="text" id="descricao" name="descricao" [(ngModel)]="servico.descricao" required>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="preco">Preço:</label>
+        <input class="form-input" type="number" id="preco" name="preco" [(ngModel)]="servico.preco" step="0.01" required>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="duracaoMinutos">Duração (minutos):</label>
+        <input class="form-input" type="number" id="duracaoMinutos" name="duracaoMinutos" [(ngModel)]="servico.duracaoMinutos">
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">{{ editandoServico ? '✏️ Atualizar' : '💾 Salvar' }} Serviço</button>
+        <button type="button" class="btn btn-secondary" (click)="cancelarEdicao()">❌ Cancelar</button>
+      </div>
+    </form>
+  </div>
 
-<div *ngIf="mostrarFormulario" class="formulario-cadastro">
-  <h3>Cadastrar Novo Serviço</h3>
-  <form (ngSubmit)="cadastrarServico()">
-    <div class="campo">
-      <label for="nome">Nome:</label>
-      <input type="text" id="nome" [(ngModel)]="servico.nome" required>
+  <div class="servicos-grid">
+    <div *ngFor="let s of servicos; let i = index" class="servico-card card fade-in-up">
+      <div class="servico-icon">✂️</div>
+      <h4>{{ s.nome }}</h4>
+      <div class="servico-info">
+        <p>📝 {{ s.descricao }}</p>
+        <p>💰 R$ {{ s.preco }}</p>
+        <p>⏱️ {{ s.duracaoMinutos }} minutos</p>
+      </div>
+      <div class="servico-actions">
+        <button class="btn btn-edit" (click)="editarServico(i)">✏️ Editar</button>
+        <button class="btn btn-delete" (click)="deletarServico(i)">🗑️ Deletar</button>
+      </div>
     </div>
-    
-    <div class="campo">
-      <label for="descricao">Descrição:</label>
-      <input type="text" id="descricao" [(ngModel)]="servico.descricao" required>
-    </div>
-    
-    <div class="campo">
-      <label for="preco">Preço:</label>
-      <input type="number" id="preco" [(ngModel)]="servico.preco" step="0.01" required>
-    </div>
-    
-    <div class="campo">
-      <label for="duracaoMinutos">Duração (minutos):</label>
-      <input type="number" id="duracaoMinutos" [(ngModel)]="servico.duracaoMinutos">
-    </div>
-    
-    <button type="submit" class="btn-salvar">Salvar</button>
-  </form>
-</div>
-
-<div class="lista-servicos">
-  <h3>Serviços Cadastrados</h3>
-  <div *ngFor="let s of servicos" class="servico-item">
-    <p><strong>Nome:</strong> {{ s.nome }}</p>
-    <p><strong>Descrição:</strong> {{ s.descricao }}</p>
-    <p><strong>Preço:</strong> R$ {{ s.preco }}</p>
-    <p><strong>Duração:</strong> {{ s.duracaoMinutos }} minutos</p>
   </div>
 </div>
