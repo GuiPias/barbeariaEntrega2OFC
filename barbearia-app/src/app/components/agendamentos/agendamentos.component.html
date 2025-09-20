@@ -1,0 +1,47 @@
+<div class="container">
+  <div class="page-header">
+    <h2>📅 Agendamentos</h2>
+    <button class="btn btn-success" (click)="mostrarFormulario = !mostrarFormulario">
+      {{ mostrarFormulario ? '❌ Cancelar' : '➕ Novo Agendamento' }}
+    </button>
+  </div>
+
+  <div *ngIf="mostrarFormulario" class="card form-card fade-in-up">
+    <h3>Cadastrar Novo Agendamento</h3>
+    <form (ngSubmit)="cadastrarAgendamento()">
+      <div class="form-group">
+        <label class="form-label" for="cliente">Cliente:</label>
+        <input class="form-input" type="text" id="cliente" [(ngModel)]="agendamento.cliente" required>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="servico">Serviço:</label>
+        <input class="form-input" type="text" id="servico" [(ngModel)]="agendamento.servico" required>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="data">Data:</label>
+        <input class="form-input" type="date" id="data" [(ngModel)]="agendamento.data" required>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="horario">Horário:</label>
+        <input class="form-input" type="time" id="horario" [(ngModel)]="agendamento.horario" required>
+      </div>
+      
+      <button type="submit" class="btn btn-primary">💾 Salvar Agendamento</button>
+    </form>
+  </div>
+
+  <div class="agendamentos-grid">
+    <div *ngFor="let a of agendamentos" class="agendamento-card card fade-in-up">
+      <div class="agendamento-icon">📅</div>
+      <h4>{{ a.cliente }}</h4>
+      <div class="agendamento-info">
+        <p>✂️ {{ a.servico }}</p>
+        <p>📆 {{ a.data }}</p>
+        <p>🕐 {{ a.horario }}</p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -3,18 +3,19 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing-module';
-import { AppComponent } from './app';
-import { PagInicialComponent } from './pages/pag-inicial/pag-inicial';
-import { ClientesComponent } from './pages/clientes/clientes';
-import { AgendamentosComponent } from './pages/agendamentos/agendamentos';
-import { ServicosComponent } from './pages/servicos/servicos';
-import { FuncionariosComponent } from './pages/funcionarios/funcionarios';
-import { ProdutosComponent } from './pages/produtos/produtos';
+import { AppComponent } from './app.component';
+import { PagInicialComponent } from './components/pag-inicial/pag-inicial.component';
+import { ClientesComponent } from './components/clientes/clientes.component';
+import { AgendamentosComponent } from './components/agendamentos/agendamentos.component';
+import { ServicosComponent } from './components/servicos/servicos.component';
+import { FuncionariosComponent } from './components/funcionarios/funcionarios.component';
+import { ProdutosComponent } from './components/produtos/produtos.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PagInicialComponent,
+    ClientesComponent,
     AgendamentosComponent,
     ServicosComponent,
     FuncionariosComponent,
@@ -23,8 +24,7 @@ import { ProdutosComponent } from './pages/produtos/produtos';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule,
-    ClientesComponent
+    FormsModule
   ],
   providers: [
     provideBrowserGlobalErrorListeners()

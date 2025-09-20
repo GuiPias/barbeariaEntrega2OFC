@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PagInicialComponent } from './pages/pag-inicial/pag-inicial';
-import { ClientesComponent } from './pages/clientes/clientes';
-import { AgendamentosComponent } from './pages/agendamentos/agendamentos';
-import { ServicosComponent } from './pages/servicos/servicos';
-import { FuncionariosComponent } from './pages/funcionarios/funcionarios';
-import { ProdutosComponent } from './pages/produtos/produtos';
+import { PagInicialComponent } from './components/pag-inicial/pag-inicial.component';
+import { ClientesComponent } from './components/clientes/clientes.component';
+import { AgendamentosComponent } from './components/agendamentos/agendamentos.component';
+import { ServicosComponent } from './components/servicos/servicos.component';
+import { FuncionariosComponent } from './components/funcionarios/funcionarios.component';
+import { ProdutosComponent } from './components/produtos/produtos.component';
 
 const routes: Routes = [
   { path: '', component: PagInicialComponent },
