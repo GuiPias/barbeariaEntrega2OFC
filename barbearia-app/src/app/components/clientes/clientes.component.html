@@ -7,7 +7,7 @@
   </div>
 
   <div *ngIf="mostrarFormulario" class="card form-card fade-in-up">
-    <h3>Cadastrar Novo Cliente</h3>
+    <h3>{{ editandoCliente ? 'Editar Cliente' : 'Cadastrar Novo Cliente' }}</h3>
     <form (ngSubmit)="cadastrarCliente()">
       <div class="form-group">
         <label class="form-label" for="nome">Nome:</label>
@@ -29,18 +29,25 @@
         <input class="form-input" type="number" id="idade" name="idade" [(ngModel)]="cliente.idade" required>
       </div>
       
-      <button type="submit" class="btn btn-primary">💾 Salvar Cliente</button>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">{{ editandoCliente ? '✏️ Atualizar' : '💾 Salvar' }} Cliente</button>
+        <button type="button" class="btn btn-secondary" (click)="cancelarEdicao()">❌ Cancelar</button>
+      </div>
     </form>
   </div>
 
   <div class="clientes-grid">
-    <div *ngFor="let c of clientes" class="cliente-card card fade-in-up">
+    <div *ngFor="let c of clientes; let i = index" class="cliente-card card fade-in-up">
       <div class="cliente-avatar">👤</div>
       <h4>{{ c.nome }}</h4>
       <div class="cliente-info">
         <p>📱 {{ c.celular }}</p>
         <p>✉️ {{ c.email }}</p>
         <p>🎂 {{ c.idade }} anos</p>
+      </div>
+      <div class="cliente-actions">
+        <button class="btn btn-edit" (click)="editarCliente(i)">✏️ Editar</button>
+        <button class="btn btn-delete" (click)="deletarCliente(i)">🗑️ Deletar</button>
       </div>
     </div>
   </div>
