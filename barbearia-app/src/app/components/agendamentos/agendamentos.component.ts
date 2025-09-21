@@ -1,4 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AgendamentoService } from '../../services/agendamento/agendamento.service';
+import { ClienteService } from '../../services/cliente/cliente.service';
+import { FuncionarioService } from '../../services/funcionario/funcionario.service';
+import { ServicoService } from '../../services/servico/servico.service';
+import { Agendamento } from '../../model/agendamentos/agendamento.model';
+import { Cliente } from '../../model/clientes/cliente.model';
+import { Funcionario } from '../../model/funcionarios/funcionario.model';
+import { Servico } from '../../model/servicos/servico.model';
 
 @Component({
   selector: 'app-agendamentos',
@@ -6,58 +14,126 @@ import { Component } from '@angular/core';
   templateUrl: './agendamentos.component.html',
   styleUrls: ['./agendamentos.component.css']
 })
-export class AgendamentosComponent {
+export class AgendamentosComponent implements OnInit {
   mostrarFormulario = false;
   editandoAgendamento = false;
-  agendamentoEditandoIndex = -1;
+  agendamentoEditandoId?: number;
   
-  agendamento = {
-    cliente: '',
-    servico: '',
-    data: '',
-    horario: ''
+  agendamento: Agendamento = {
+    dataHora: '',
+    observacoes: '',
+    cliente: { nome: '' },
+    funcionario: { nome: '' },
+    servico: { nome: '' }
   };
   
-  agendamentos: any[] = [];
+  agendamentos: Agendamento[] = [];
+  clientes: Cliente[] = [];
+  funcionarios: Funcionario[] = [];
+  servicos: Servico[] = [];
+
+  constructor(
+    private agendamentoService: AgendamentoService,
+    private clienteService: ClienteService,
+    private funcionarioService: FuncionarioService,
+    private servicoService: ServicoService
+  ) {}
+  
+  ngOnInit() {
+    this.carregarAgendamentos();
+    this.carregarClientes();
+    this.carregarFuncionarios();
+    this.carregarServicos();
+  }
+
+  carregarAgendamentos() {
+    this.agendamentoService.getAll().subscribe({
+      next: (agendamentos) => this.agendamentos = agendamentos,
+      error: (error) => console.error('Erro ao carregar agendamentos:', error)
+    });
+  }
+
+  carregarClientes() {
+    this.clienteService.findAll().subscribe({
+      next: (clientes) => this.clientes = clientes,
+      error: (error) => console.error('Erro ao carregar clientes:', error)
+    });
+  }
+
+  carregarFuncionarios() {
+    this.funcionarioService.findAll().subscribe({
+      next: (funcionarios) => this.funcionarios = funcionarios,
+      error: (error) => console.error('Erro ao carregar funcionários:', error)
+    });
+  }
+
+  carregarServicos() {
+    this.servicoService.findAll().subscribe({
+      next: (servicos) => this.servicos = servicos,
+      error: (error) => console.error('Erro ao carregar serviços:', error)
+    });
+  }
   
   cadastrarAgendamento() {
-    console.log('Dados do agendamento:', this.agendamento);
-    
-    if (this.agendamento.cliente && this.agendamento.servico && this.agendamento.data && this.agendamento.horario) {
-      if (this.editandoAgendamento) {
-        this.agendamentos[this.agendamentoEditandoIndex] = { ...this.agendamento };
-        this.editandoAgendamento = false;
-        this.agendamentoEditandoIndex = -1;
-        alert('Agendamento atualizado com sucesso!');
+    if (this.agendamento.cliente && this.agendamento.funcionario && this.agendamento.servico && this.agendamento.dataHora) {
+      if (this.editandoAgendamento && this.agendamentoEditandoId) {
+        this.agendamentoService.update(this.agendamentoEditandoId, this.agendamento).subscribe({
+          next: () => {
+            alert('Agendamento atualizado com sucesso!');
+            this.resetForm();
+            this.carregarAgendamentos();
+          },
+          error: (error) => {
+            console.error('Erro ao atualizar agendamento:', error);
+            alert('Erro ao atualizar agendamento!');
+          }
+        });
       } else {
-        this.agendamentos.push({ ...this.agendamento });
-        alert('Agendamento cadastrado com sucesso!');
+        this.agendamentoService.create(this.agendamento).subscribe({
+          next: () => {
+            alert('Agendamento cadastrado com sucesso!');
+            this.resetForm();
+            this.carregarAgendamentos();
+          },
+          error: (error) => {
+            console.error('Erro ao cadastrar agendamento:', error);
+            alert('Erro ao cadastrar agendamento!');
+          }
+        });
       }
-      this.agendamento = { cliente: '', servico: '', data: '', horario: '' };
-      this.mostrarFormulario = false;
-    } else {
-      alert('Por favor, preencha todos os campos obrigatórios!');
     }
   }
   
-  editarAgendamento(index: number) {
-    this.agendamento = { ...this.agendamentos[index] };
+  editarAgendamento(agendamento: Agendamento) {
+    this.agendamento = { ...agendamento };
     this.editandoAgendamento = true;
-    this.agendamentoEditandoIndex = index;
+    this.agendamentoEditandoId = agendamento.id_agendamento;
     this.mostrarFormulario = true;
   }
   
-  deletarAgendamento(index: number) {
-    if (confirm('Tem certeza que deseja deletar este agendamento?')) {
-      this.agendamentos.splice(index, 1);
-      alert('Agendamento deletado com sucesso!');
+  deletarAgendamento(agendamento: Agendamento) {
+    if (confirm('Tem certeza que deseja deletar este agendamento?') && agendamento.id_agendamento) {
+      this.agendamentoService.delete(agendamento.id_agendamento).subscribe({
+        next: () => {
+          alert('Agendamento deletado com sucesso!');
+          this.carregarAgendamentos();
+        },
+        error: (error) => {
+          console.error('Erro ao deletar agendamento:', error);
+          alert('Erro ao deletar agendamento!');
+        }
+      });
     }
   }
   
   cancelarEdicao() {
+    this.resetForm();
+  }
+
+  private resetForm() {
     this.editandoAgendamento = false;
-    this.agendamentoEditandoIndex = -1;
-    this.agendamento = { cliente: '', servico: '', data: '', horario: '' };
+    this.agendamentoEditandoId = undefined;
+    this.agendamento = { dataHora: '', observacoes: '', cliente: null as any, funcionario: null as any, servico: null as any };
     this.mostrarFormulario = false;
   }
 }
