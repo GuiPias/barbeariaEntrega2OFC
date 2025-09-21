@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ProdutoService } from '../../services/produto/produto.service';
+import { Produto } from '../../model/produtos/produto.model';
 
 @Component({
   selector: 'app-produtos',
@@ -6,56 +8,93 @@ import { Component } from '@angular/core';
   templateUrl: './produtos.component.html',
   styleUrls: ['./produtos.component.css']
 })
-export class ProdutosComponent {
+export class ProdutosComponent implements OnInit {
   mostrarFormulario = false;
   editandoProduto = false;
-  produtoEditandoIndex = -1;
+  produtoEditandoId?: number;
   
-  produto = {
+  produto: Produto = {
     nome: '',
     descricao: '',
-    preco: null,
-    quantidadeEstoque: null
+    preco: 0,
+    quantidadeEstoque: 0
   };
   
-  produtos: any[] = [];
+  produtos: Produto[] = [];
+
+  constructor(private produtoService: ProdutoService) {}
+  
+  ngOnInit() {
+    this.carregarProdutos();
+  }
+
+  carregarProdutos() {
+    this.produtoService.findAll().subscribe({
+      next: (produtos) => this.produtos = produtos,
+      error: (error) => console.error('Erro ao carregar produtos:', error)
+    });
+  }
   
   cadastrarProduto() {
     if (this.produto.nome && this.produto.descricao && this.produto.preco && this.produto.quantidadeEstoque) {
-      if (this.editandoProduto) {
-        this.produtos[this.produtoEditandoIndex] = { ...this.produto };
-        this.editandoProduto = false;
-        this.produtoEditandoIndex = -1;
-        alert('Produto atualizado com sucesso!');
+      if (this.editandoProduto && this.produtoEditandoId) {
+        this.produtoService.update(this.produtoEditandoId, this.produto).subscribe({
+          next: () => {
+            alert('Produto atualizado com sucesso!');
+            this.resetForm();
+            this.carregarProdutos();
+          },
+          error: (error) => {
+            console.error('Erro ao atualizar produto:', error);
+            alert('Erro ao atualizar produto!');
+          }
+        });
       } else {
-        this.produtos.push({ ...this.produto });
-        alert('Produto cadastrado com sucesso!');
+        this.produtoService.save(this.produto).subscribe({
+          next: () => {
+            alert('Produto cadastrado com sucesso!');
+            this.resetForm();
+            this.carregarProdutos();
+          },
+          error: (error) => {
+            console.error('Erro ao cadastrar produto:', error);
+            alert('Erro ao cadastrar produto!');
+          }
+        });
       }
-      this.produto = { nome: '', descricao: '', preco: null, quantidadeEstoque: null };
-      this.mostrarFormulario = false;
-    } else {
-      alert('Por favor, preencha todos os campos obrigatórios!');
     }
   }
   
-  editarProduto(index: number) {
-    this.produto = { ...this.produtos[index] };
+  editarProduto(produto: Produto) {
+    this.produto = { ...produto };
     this.editandoProduto = true;
-    this.produtoEditandoIndex = index;
+    this.produtoEditandoId = produto.id_produto;
     this.mostrarFormulario = true;
   }
   
-  deletarProduto(index: number) {
-    if (confirm('Tem certeza que deseja deletar este produto?')) {
-      this.produtos.splice(index, 1);
-      alert('Produto deletado com sucesso!');
+  deletarProduto(produto: Produto) {
+    if (confirm('Tem certeza que deseja deletar este produto?') && produto.id_produto) {
+      this.produtoService.deleteById(produto.id_produto).subscribe({
+        next: () => {
+          alert('Produto deletado com sucesso!');
+          this.carregarProdutos();
+        },
+        error: (error) => {
+          console.error('Erro ao deletar produto:', error);
+          alert('Erro ao deletar produto!');
+        }
+      });
     }
   }
   
   cancelarEdicao() {
+    this.resetForm();
+  }
+
+  private resetForm() {
     this.editandoProduto = false;
-    this.produtoEditandoIndex = -1;
-    this.produto = { nome: '', descricao: '', preco: null, quantidadeEstoque: null };
+    this.produtoEditandoId = undefined;
+    this.produto = { nome: '', descricao: '', preco: 0, quantidadeEstoque: 0 };
     this.mostrarFormulario = false;
   }
 }

@@ -37,7 +37,7 @@
   </div>
 
   <div class="produtos-grid">
-    <div *ngFor="let p of produtos; let i = index" class="produto-card card fade-in-up">
+    <div *ngFor="let p of produtos" class="produto-card card fade-in-up">
       <div class="produto-icon">🛍️</div>
       <h4>{{ p.nome }}</h4>
       <div class="produto-info">
@@ -46,8 +46,8 @@
         <p>📦 {{ p.quantidadeEstoque }} unidades</p>
       </div>
       <div class="produto-actions">
-        <button class="btn btn-edit" (click)="editarProduto(i)">✏️ Editar</button>
-        <button class="btn btn-delete" (click)="deletarProduto(i)">🗑️ Deletar</button>
+        <button class="btn btn-edit" (click)="editarProduto(p)">✏️ Editar</button>
+        <button class="btn btn-delete" (click)="deletarProduto(p)">🗑️ Deletar</button>
       </div>
     </div>
   </div>
