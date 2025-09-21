@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FuncionarioService } from '../../services/funcionario/funcionario.service';
+import { Funcionario } from '../../model/funcionarios/funcionario.model';
 
 @Component({
   selector: 'app-funcionarios',
@@ -6,54 +8,91 @@ import { Component } from '@angular/core';
   templateUrl: './funcionarios.component.html',
   styleUrls: ['./funcionarios.component.css']
 })
-export class FuncionariosComponent {
+export class FuncionariosComponent implements OnInit {
   mostrarFormulario = false;
   editandoFuncionario = false;
-  funcionarioEditandoIndex = -1;
+  funcionarioEditandoId?: number;
   
-  funcionario = {
+  funcionario: Funcionario = {
     nome: '',
     telefone: '',
     endereco: ''
   };
   
-  funcionarios: any[] = [];
+  funcionarios: Funcionario[] = [];
+
+  constructor(private funcionarioService: FuncionarioService) {}
+  
+  ngOnInit() {
+    this.carregarFuncionarios();
+  }
+
+  carregarFuncionarios() {
+    this.funcionarioService.findAll().subscribe({
+      next: (funcionarios) => this.funcionarios = funcionarios,
+      error: (error) => console.error('Erro ao carregar funcionários:', error)
+    });
+  }
   
   cadastrarFuncionario() {
     if (this.funcionario.nome && this.funcionario.telefone && this.funcionario.endereco) {
-      if (this.editandoFuncionario) {
-        this.funcionarios[this.funcionarioEditandoIndex] = { ...this.funcionario };
-        this.editandoFuncionario = false;
-        this.funcionarioEditandoIndex = -1;
-        alert('Funcionário atualizado com sucesso!');
+      if (this.editandoFuncionario && this.funcionarioEditandoId) {
+        this.funcionarioService.update(this.funcionarioEditandoId, this.funcionario).subscribe({
+          next: () => {
+            alert('Funcionário atualizado com sucesso!');
+            this.resetForm();
+            this.carregarFuncionarios();
+          },
+          error: (error) => {
+            console.error('Erro ao atualizar funcionário:', error);
+            alert('Erro ao atualizar funcionário!');
+          }
+        });
       } else {
-        this.funcionarios.push({ ...this.funcionario });
-        alert('Funcionário cadastrado com sucesso!');
+        this.funcionarioService.save(this.funcionario).subscribe({
+          next: () => {
+            alert('Funcionário cadastrado com sucesso!');
+            this.resetForm();
+            this.carregarFuncionarios();
+          },
+          error: (error) => {
+            console.error('Erro ao cadastrar funcionário:', error);
+            alert('Erro ao cadastrar funcionário!');
+          }
+        });
       }
-      this.funcionario = { nome: '', telefone: '', endereco: '' };
-      this.mostrarFormulario = false;
-    } else {
-      alert('Por favor, preencha todos os campos obrigatórios!');
     }
   }
   
-  editarFuncionario(index: number) {
-    this.funcionario = { ...this.funcionarios[index] };
+  editarFuncionario(funcionario: Funcionario) {
+    this.funcionario = { ...funcionario };
     this.editandoFuncionario = true;
-    this.funcionarioEditandoIndex = index;
+    this.funcionarioEditandoId = funcionario.id_funcionario;
     this.mostrarFormulario = true;
   }
   
-  deletarFuncionario(index: number) {
-    if (confirm('Tem certeza que deseja deletar este funcionário?')) {
-      this.funcionarios.splice(index, 1);
-      alert('Funcionário deletado com sucesso!');
+  deletarFuncionario(funcionario: Funcionario) {
+    if (confirm('Tem certeza que deseja deletar este funcionário?') && funcionario.id_funcionario) {
+      this.funcionarioService.delete(funcionario.id_funcionario).subscribe({
+        next: () => {
+          alert('Funcionário deletado com sucesso!');
+          this.carregarFuncionarios();
+        },
+        error: (error) => {
+          console.error('Erro ao deletar funcionário:', error);
+          alert('Erro ao deletar funcionário!');
+        }
+      });
     }
   }
   
   cancelarEdicao() {
+    this.resetForm();
+  }
+
+  private resetForm() {
     this.editandoFuncionario = false;
-    this.funcionarioEditandoIndex = -1;
+    this.funcionarioEditandoId = undefined;
     this.funcionario = { nome: '', telefone: '', endereco: '' };
     this.mostrarFormulario = false;
   }

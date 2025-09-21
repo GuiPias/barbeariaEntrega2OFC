@@ -32,7 +32,7 @@
   </div>
 
   <div class="funcionarios-grid">
-    <div *ngFor="let f of funcionarios; let i = index" class="funcionario-card card fade-in-up">
+    <div *ngFor="let f of funcionarios" class="funcionario-card card fade-in-up">
       <div class="funcionario-icon">👨💼</div>
       <h4>{{ f.nome }}</h4>
       <div class="funcionario-info">
@@ -40,8 +40,8 @@
         <p>🏠 {{ f.endereco }}</p>
       </div>
       <div class="funcionario-actions">
-        <button class="btn btn-edit" (click)="editarFuncionario(i)">✏️ Editar</button>
-        <button class="btn btn-delete" (click)="deletarFuncionario(i)">🗑️ Deletar</button>
+        <button class="btn btn-edit" (click)="editarFuncionario(f)">✏️ Editar</button>
+        <button class="btn btn-delete" (click)="deletarFuncionario(f)">🗑️ Deletar</button>
       </div>
     </div>
   </div>
