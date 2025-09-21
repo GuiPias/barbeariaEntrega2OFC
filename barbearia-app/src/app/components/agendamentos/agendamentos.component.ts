@@ -76,8 +76,18 @@ export class AgendamentosComponent implements OnInit {
   
   cadastrarAgendamento() {
     if (this.agendamento.cliente && this.agendamento.funcionario && this.agendamento.servico && this.agendamento.dataHora) {
+
+      const agendamentoData = {
+        dataHora: this.agendamento.dataHora + ':00',
+        observacoes: this.agendamento.observacoes || '',
+        cliente: { id_cliente: this.agendamento.cliente.id_cliente },
+        funcionario: { id_funcionario: this.agendamento.funcionario.id_funcionario },
+        servico: { id_servico: this.agendamento.servico.id_servico }
+      };
+
+      
       if (this.editandoAgendamento && this.agendamentoEditandoId) {
-        this.agendamentoService.update(this.agendamentoEditandoId, this.agendamento).subscribe({
+        this.agendamentoService.update(this.agendamentoEditandoId, agendamentoData).subscribe({
           next: () => {
             alert('Agendamento atualizado com sucesso!');
             this.resetForm();
@@ -89,7 +99,7 @@ export class AgendamentosComponent implements OnInit {
           }
         });
       } else {
-        this.agendamentoService.create(this.agendamento).subscribe({
+        this.agendamentoService.create(agendamentoData).subscribe({
           next: () => {
             alert('Agendamento cadastrado com sucesso!');
             this.resetForm();

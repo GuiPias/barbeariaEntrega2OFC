@@ -40,7 +40,14 @@
       
       <div class="form-group">
         <label class="form-label" for="observacoes">Observações:</label>
-        <input class="form-input" type="text" id="observacoes" name="observacoes" [(ngModel)]="agendamento.observacoes">
+        <select class="form-input" id="observacoes" name="observacoes" [(ngModel)]="agendamento.observacoes">
+          <option value="">Nenhuma observação</option>
+          <option value="Cliente preferencial">Cliente preferencial</option>
+          <option value="Primeira vez">Primeira vez</option>
+          <option value="Corte especial">Corte especial</option>
+          <option value="Alergia">Alergia</option>
+          <option value="Outros">Outros</option>
+        </select>
       </div>
       
       <div class="form-actions">
@@ -58,7 +65,7 @@
         <p>👨💼 {{ a.funcionario.nome }}</p>
         <p>✂️ {{ a.servico.nome }}</p>
         <p>📆 {{ a.dataHora | date:'dd/MM/yyyy HH:mm' }}</p>
-        <p>📝 {{ a.observacoes }}</p>
+        <p>📝 {{ a.observacoes || 'Nenhuma observação' }}</p>
       </div>
       <div class="agendamento-actions">
         <button class="btn btn-edit" (click)="editarAgendamento(a)">✏️ Editar</button>
