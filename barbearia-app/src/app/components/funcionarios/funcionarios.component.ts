@@ -20,6 +20,12 @@ export class FuncionariosComponent implements OnInit {
   };
   
   funcionarios: Funcionario[] = [];
+  
+  erros = {
+    nome: '',
+    telefone: '',
+    endereco: ''
+  };
 
   constructor(private funcionarioService: FuncionarioService) {}
   
@@ -35,7 +41,7 @@ export class FuncionariosComponent implements OnInit {
   }
   
   cadastrarFuncionario() {
-    if (this.funcionario.nome && this.funcionario.telefone && this.funcionario.endereco) {
+    if (this.validarFormulario()) {
       if (this.editandoFuncionario && this.funcionarioEditandoId) {
         this.funcionarioService.update(this.funcionarioEditandoId, this.funcionario).subscribe({
           next: () => {
@@ -94,6 +100,58 @@ export class FuncionariosComponent implements OnInit {
     this.editandoFuncionario = false;
     this.funcionarioEditandoId = undefined;
     this.funcionario = { nome: '', telefone: '', endereco: '' };
+    this.limparErros();
     this.mostrarFormulario = false;
+  }
+
+  private validarFormulario(): boolean {
+    this.limparErros();
+    let valido = true;
+    
+    if (!this.validarNome()) valido = false;
+    if (!this.validarTelefone()) valido = false;
+    if (!this.validarEndereco()) valido = false;
+    
+    return valido;
+  }
+
+  private limparErros(): void {
+    this.erros = { nome: '', telefone: '', endereco: '' };
+  }
+
+  private validarNome(): boolean {
+    if (!this.funcionario.nome || this.funcionario.nome.trim().length < 3) {
+      this.erros.nome = 'O nome deve ter no mínimo 3 letras!';
+      return false;
+    }
+    return true;
+  }
+
+  private validarTelefone(): boolean {
+    const telefoneRegex = /^\d{2}-\d{9}$/;
+    if (!this.funcionario.telefone || !telefoneRegex.test(this.funcionario.telefone)) {
+      this.erros.telefone = 'O telefone deve estar no formato XX-XXXXXXXXX (11 números)!';
+      return false;
+    }
+    return true;
+  }
+
+  private validarEndereco(): boolean {
+    if (!this.funcionario.endereco || this.funcionario.endereco.trim().length === 0) {
+      this.erros.endereco = 'O endereço não pode ser nulo!';
+      return false;
+    }
+    return true;
+  }
+
+  formatarTelefone(event: any): void {
+    let valor = event.target.value.replace(/\D/g, '');
+    
+    if (valor.length <= 11) {
+      if (valor.length > 2) {
+        valor = valor.substring(0, 2) + '-' + valor.substring(2);
+      }
+      this.funcionario.telefone = valor;
+    }
   }
 }

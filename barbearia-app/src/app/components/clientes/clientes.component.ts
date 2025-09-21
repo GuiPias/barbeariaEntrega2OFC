@@ -21,6 +21,13 @@ export class ClientesComponent implements OnInit {
   };
   
   clientes: Cliente[] = [];
+  
+  erros = {
+    nome: '',
+    celular: '',
+    email: '',
+    idade: ''
+  };
 
   constructor(private clienteService: ClienteService) {}
   
@@ -36,7 +43,7 @@ export class ClientesComponent implements OnInit {
   }
 
   cadastrarCliente() {
-    if (this.cliente.nome && this.cliente.celular && this.cliente.email && this.cliente.idade) {
+    if (this.validarFormulario()) {
       if (this.editandoCliente && this.clienteEditandoId) {
         this.clienteService.update(this.clienteEditandoId, this.cliente).subscribe({
           next: () => {
@@ -95,6 +102,68 @@ export class ClientesComponent implements OnInit {
     this.editandoCliente = false;
     this.clienteEditandoId = undefined;
     this.cliente = { nome: '', celular: '', email: '', idade: 0 };
+    this.limparErros();
     this.mostrarFormulario = false;
+  }
+
+  private validarFormulario(): boolean {
+    this.limparErros();
+    let valido = true;
+    
+    if (!this.validarNome()) valido = false;
+    if (!this.validarCelular()) valido = false;
+    if (!this.validarEmail()) valido = false;
+    if (!this.validarIdade()) valido = false;
+    
+    return valido;
+  }
+
+  private limparErros(): void {
+    this.erros = { nome: '', celular: '', email: '', idade: '' };
+  }
+
+  private validarNome(): boolean {
+    if (!this.cliente.nome || this.cliente.nome.trim().length < 3) {
+      this.erros.nome = 'O nome deve ter no mínimo 3 letras!';
+      return false;
+    }
+    return true;
+  }
+
+  private validarCelular(): boolean {
+    const celularRegex = /^\d{2}-\d{9}$/;
+    if (!this.cliente.celular || !celularRegex.test(this.cliente.celular)) {
+      this.erros.celular = 'O celular deve estar no formato XX-XXXXXXXXX (11 números)!';
+      return false;
+    }
+    return true;
+  }
+
+  private validarEmail(): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!this.cliente.email || !emailRegex.test(this.cliente.email)) {
+      this.erros.email = 'Digite um email válido!';
+      return false;
+    }
+    return true;
+  }
+
+  private validarIdade(): boolean {
+    if (!this.cliente.idade || this.cliente.idade < 1 || this.cliente.idade > 120) {
+      this.erros.idade = 'A idade deve ser entre 1 e 120 anos!';
+      return false;
+    }
+    return true;
+  }
+
+  formatarCelular(event: any): void {
+    let valor = event.target.value.replace(/\D/g, '');
+    
+    if (valor.length <= 11) {
+      if (valor.length > 2) {
+        valor = valor.substring(0, 2) + '-' + valor.substring(2);
+      }
+      this.cliente.celular = valor;
+    }
   }
 }

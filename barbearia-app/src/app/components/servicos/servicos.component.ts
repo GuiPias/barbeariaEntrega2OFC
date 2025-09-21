@@ -21,6 +21,13 @@ export class ServicosComponent implements OnInit {
   };
   
   servicos: Servico[] = [];
+  
+  erros = {
+    nome: '',
+    descricao: '',
+    preco: '',
+    duracaoMinutos: ''
+  };
 
   constructor(private servicoService: ServicoService) {}
   
@@ -36,7 +43,7 @@ export class ServicosComponent implements OnInit {
   }
   
   cadastrarServico() {
-    if (this.servico.nome && this.servico.descricao && this.servico.preco) {
+    if (this.validarFormulario()) {
       if (this.editandoServico && this.servicoEditandoId) {
         this.servicoService.update(this.servicoEditandoId, this.servico).subscribe({
           next: () => {
@@ -95,6 +102,55 @@ export class ServicosComponent implements OnInit {
     this.editandoServico = false;
     this.servicoEditandoId = undefined;
     this.servico = { nome: '', descricao: '', preco: 0, duracaoMinutos: 0 };
+    this.limparErros();
     this.mostrarFormulario = false;
+  }
+
+  private validarFormulario(): boolean {
+    this.limparErros();
+    let valido = true;
+    
+    if (!this.validarNome()) valido = false;
+    if (!this.validarDescricao()) valido = false;
+    if (!this.validarPreco()) valido = false;
+    if (!this.validarDuracao()) valido = false;
+    
+    return valido;
+  }
+
+  private limparErros(): void {
+    this.erros = { nome: '', descricao: '', preco: '', duracaoMinutos: '' };
+  }
+
+  private validarNome(): boolean {
+    if (!this.servico.nome || this.servico.nome.trim().length < 3) {
+      this.erros.nome = 'O nome deve ter no mínimo 3 letras!';
+      return false;
+    }
+    return true;
+  }
+
+  private validarDescricao(): boolean {
+    if (!this.servico.descricao || this.servico.descricao.trim().length === 0) {
+      this.erros.descricao = 'A descrição não pode ser nula!';
+      return false;
+    }
+    return true;
+  }
+
+  private validarPreco(): boolean {
+    if (!this.servico.preco || this.servico.preco <= 0) {
+      this.erros.preco = 'O preço não pode ser nulo ou zero!';
+      return false;
+    }
+    return true;
+  }
+
+  private validarDuracao(): boolean {
+    if (!this.servico.duracaoMinutos || this.servico.duracaoMinutos < 20) {
+      this.erros.duracaoMinutos = 'A duração deve ser no mínimo 20 minutos!';
+      return false;
+    }
+    return true;
   }
 }

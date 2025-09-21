@@ -11,22 +11,30 @@
     <form (ngSubmit)="cadastrarServico()">
       <div class="form-group">
         <label class="form-label" for="nome">Nome:</label>
-        <input class="form-input" type="text" id="nome" name="nome" [(ngModel)]="servico.nome" required>
+        <input class="form-input" type="text" id="nome" name="nome" [(ngModel)]="servico.nome" 
+               placeholder="Mínimo 3 letras" minlength="3" required>
+        <div *ngIf="erros.nome" class="error-message">{{ erros.nome }}</div>
       </div>
       
       <div class="form-group">
         <label class="form-label" for="descricao">Descrição:</label>
-        <input class="form-input" type="text" id="descricao" name="descricao" [(ngModel)]="servico.descricao" required>
+        <input class="form-input" type="text" id="descricao" name="descricao" [(ngModel)]="servico.descricao" 
+               placeholder="Descreva o serviço" required>
+        <div *ngIf="erros.descricao" class="error-message">{{ erros.descricao }}</div>
       </div>
       
       <div class="form-group">
         <label class="form-label" for="preco">Preço:</label>
-        <input class="form-input" type="number" id="preco" name="preco" [(ngModel)]="servico.preco" step="0.01" required>
+        <input class="form-input" type="number" id="preco" name="preco" [(ngModel)]="servico.preco" 
+               placeholder="Valor maior que zero" step="0.01" min="0.01" required>
+        <div *ngIf="erros.preco" class="error-message">{{ erros.preco }}</div>
       </div>
       
       <div class="form-group">
         <label class="form-label" for="duracaoMinutos">Duração (minutos):</label>
-        <input class="form-input" type="number" id="duracaoMinutos" name="duracaoMinutos" [(ngModel)]="servico.duracaoMinutos">
+        <input class="form-input" type="number" id="duracaoMinutos" name="duracaoMinutos" [(ngModel)]="servico.duracaoMinutos" 
+               placeholder="Mínimo 20 minutos" min="20" required>
+        <div *ngIf="erros.duracaoMinutos" class="error-message">{{ erros.duracaoMinutos }}</div>
       </div>
       
       <div class="form-actions">

@@ -79,11 +79,17 @@ export class AgendamentosComponent implements OnInit {
 
       const agendamentoData = {
         dataHora: this.agendamento.dataHora + ':00',
-        observacoes: this.agendamento.observacoes || '',
-        cliente: { id_cliente: this.agendamento.cliente.id_cliente },
-        funcionario: { id_funcionario: this.agendamento.funcionario.id_funcionario },
-        servico: { id_servico: this.agendamento.servico.id_servico }
+        observacoes: this.agendamento.observacoes || 'Nenhuma observação',
+        cliente: this.agendamento.cliente,
+        funcionario: this.agendamento.funcionario,
+        servico: this.agendamento.servico
       };
+      
+      console.log('Dados sendo enviados:');
+      console.log('Cliente:', this.agendamento.cliente);
+      console.log('Funcionario:', this.agendamento.funcionario);
+      console.log('Servico:', this.agendamento.servico);
+      console.log('Objeto completo:', agendamentoData);
 
       
       if (this.editandoAgendamento && this.agendamentoEditandoId) {
