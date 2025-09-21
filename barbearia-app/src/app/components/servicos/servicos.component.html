@@ -37,7 +37,7 @@
   </div>
 
   <div class="servicos-grid">
-    <div *ngFor="let s of servicos; let i = index" class="servico-card card fade-in-up">
+    <div *ngFor="let s of servicos" class="servico-card card fade-in-up">
       <div class="servico-icon">✂️</div>
       <h4>{{ s.nome }}</h4>
       <div class="servico-info">
@@ -46,8 +46,8 @@
         <p>⏱️ {{ s.duracaoMinutos }} minutos</p>
       </div>
       <div class="servico-actions">
-        <button class="btn btn-edit" (click)="editarServico(i)">✏️ Editar</button>
-        <button class="btn btn-delete" (click)="deletarServico(i)">🗑️ Deletar</button>
+        <button class="btn btn-edit" (click)="editarServico(s)">✏️ Editar</button>
+        <button class="btn btn-delete" (click)="deletarServico(s)">🗑️ Deletar</button>
       </div>
     </div>
   </div>
