@@ -21,6 +21,7 @@ export class ServicosComponent implements OnInit {
   };
   
   servicos: Servico[] = [];
+  erroNome = '';
 
   constructor(private servicoService: ServicoService) {}
   
@@ -36,6 +37,13 @@ export class ServicosComponent implements OnInit {
   }
   
   cadastrarServico() {
+    this.erroNome = '';
+    
+    if (!this.servico.nome || this.servico.nome.trim().length < 3) {
+      this.erroNome = 'Nome deve ter pelo menos 3 caracteres';
+      return;
+    }
+    
     if (this.servico.nome && this.servico.descricao && this.servico.preco) {
       if (this.editandoServico && this.servicoEditandoId) {
         this.servicoService.update(this.servicoEditandoId, this.servico).subscribe({
@@ -95,6 +103,7 @@ export class ServicosComponent implements OnInit {
     this.editandoServico = false;
     this.servicoEditandoId = undefined;
     this.servico = { nome: '', descricao: '', preco: 0, duracaoMinutos: 0 };
+    this.erroNome = '';
     this.mostrarFormulario = false;
   }
 }
