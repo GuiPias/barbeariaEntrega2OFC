@@ -21,6 +21,7 @@ export class ClientesComponent implements OnInit {
   };
   
   clientes: Cliente[] = [];
+<<<<<<< HEAD
   
   erros = {
     nome: '',
@@ -28,6 +29,10 @@ export class ClientesComponent implements OnInit {
     email: '',
     idade: ''
   };
+=======
+  erros: { [key: string]: string } = {};
+  Object = Object;
+>>>>>>> d34e3d63a00077e1144e5f4cd58d6988e70fd67d
 
   constructor(private clienteService: ClienteService) {}
   
@@ -40,6 +45,53 @@ export class ClientesComponent implements OnInit {
       next: (clientes) => this.clientes = clientes,
       error: (error) => console.error('Erro ao carregar clientes:', error)
     });
+  }
+
+  validarFormulario(): boolean {
+    this.erros = {};
+    let valido = true;
+
+    // Validação do nome
+    if (!this.cliente.nome || this.cliente.nome.trim().length < 3) {
+      this.erros['nome'] = 'Nome deve ter pelo menos 3 caracteres';
+      valido = false;
+    }
+
+    // Validação do celular
+    const celularLimpo = this.cliente.celular.replace(/\D/g, '');
+    if (!this.cliente.celular) {
+      this.erros['celular'] = 'Celular é obrigatório';
+      valido = false;
+    } else if (celularLimpo.length !== 11) {
+      this.erros['celular'] = 'Celular deve ter 11 dígitos (XX-XXXXXXXXX)';
+      valido = false;
+    }
+
+    // Validação do email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!this.cliente.email) {
+      this.erros['email'] = 'Email é obrigatório';
+      valido = false;
+    } else if (!emailRegex.test(this.cliente.email)) {
+      this.erros['email'] = 'Email deve ter um formato válido';
+      valido = false;
+    }
+
+    // Validação da idade
+    if (!this.cliente.idade || this.cliente.idade < 1 || this.cliente.idade > 120) {
+      this.erros['idade'] = 'Idade deve ser entre 1 e 120 anos';
+      valido = false;
+    }
+
+    return valido;
+  }
+
+  formatarCelular() {
+    let celular = this.cliente.celular.replace(/\D/g, '');
+    if (celular.length <= 11) {
+      celular = celular.replace(/(\d{2})(\d{5})(\d{4})/, '$1-$2$3');
+      this.cliente.celular = celular;
+    }
   }
 
   cadastrarCliente() {
@@ -102,7 +154,11 @@ export class ClientesComponent implements OnInit {
     this.editandoCliente = false;
     this.clienteEditandoId = undefined;
     this.cliente = { nome: '', celular: '', email: '', idade: 0 };
+<<<<<<< HEAD
     this.limparErros();
+=======
+    this.erros = {};
+>>>>>>> d34e3d63a00077e1144e5f4cd58d6988e70fd67d
     this.mostrarFormulario = false;
   }
 

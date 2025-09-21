@@ -20,12 +20,16 @@ export class FuncionariosComponent implements OnInit {
   };
   
   funcionarios: Funcionario[] = [];
+<<<<<<< HEAD
   
   erros = {
     nome: '',
     telefone: '',
     endereco: ''
   };
+=======
+  erros: { [key: string]: string } = {};
+>>>>>>> d34e3d63a00077e1144e5f4cd58d6988e70fd67d
 
   constructor(private funcionarioService: FuncionarioService) {}
   
@@ -40,8 +44,41 @@ export class FuncionariosComponent implements OnInit {
     });
   }
   
+  validarFormulario(): boolean {
+    this.erros = {};
+    let valido = true;
+
+    if (!this.funcionario.nome || this.funcionario.nome.trim().length < 3) {
+      this.erros['nome'] = 'Nome deve ter pelo menos 3 caracteres';
+      valido = false;
+    }
+
+    const telefoneLimpo = this.funcionario.telefone.replace(/\D/g, '');
+    if (!this.funcionario.telefone) {
+      this.erros['telefone'] = 'Telefone é obrigatório';
+      valido = false;
+    } else if (telefoneLimpo.length !== 11) {
+      this.erros['telefone'] = 'Telefone deve ter 11 dígitos (XX-XXXXXXXXX)';
+      valido = false;
+    }
+
+    return valido;
+  }
+
+  formatarTelefone() {
+    let telefone = this.funcionario.telefone.replace(/\D/g, '');
+    if (telefone.length <= 11) {
+      telefone = telefone.replace(/(\d{2})(\d{5})(\d{4})/, '$1-$2$3');
+      this.funcionario.telefone = telefone;
+    }
+  }
+
   cadastrarFuncionario() {
+<<<<<<< HEAD
     if (this.validarFormulario()) {
+=======
+    if (this.validarFormulario() && this.funcionario.endereco) {
+>>>>>>> d34e3d63a00077e1144e5f4cd58d6988e70fd67d
       if (this.editandoFuncionario && this.funcionarioEditandoId) {
         this.funcionarioService.update(this.funcionarioEditandoId, this.funcionario).subscribe({
           next: () => {
@@ -100,7 +137,11 @@ export class FuncionariosComponent implements OnInit {
     this.editandoFuncionario = false;
     this.funcionarioEditandoId = undefined;
     this.funcionario = { nome: '', telefone: '', endereco: '' };
+<<<<<<< HEAD
     this.limparErros();
+=======
+    this.erros = {};
+>>>>>>> d34e3d63a00077e1144e5f4cd58d6988e70fd67d
     this.mostrarFormulario = false;
   }
 

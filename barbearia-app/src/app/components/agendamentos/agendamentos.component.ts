@@ -77,12 +77,32 @@ export class AgendamentosComponent implements OnInit {
   cadastrarAgendamento() {
     if (this.agendamento.cliente && this.agendamento.funcionario && this.agendamento.servico && this.agendamento.dataHora) {
 
+      const clienteSelecionado = this.clientes.find(c => c.id_cliente === this.agendamento.cliente.id_cliente);
+      const funcionarioSelecionado = this.funcionarios.find(f => f.id_funcionario === this.agendamento.funcionario.id_funcionario);
+      const servicoSelecionado = this.servicos.find(s => s.id_servico === this.agendamento.servico.id_servico);
+
       const agendamentoData = {
         dataHora: this.agendamento.dataHora + ':00',
+<<<<<<< HEAD
         observacoes: this.agendamento.observacoes || 'Nenhuma observação',
         cliente: this.agendamento.cliente,
         funcionario: this.agendamento.funcionario,
         servico: this.agendamento.servico
+=======
+        observacoes: this.agendamento.observacoes || '',
+        cliente: { 
+          id_cliente: this.agendamento.cliente.id_cliente,
+          nome: clienteSelecionado?.nome || ''
+        },
+        funcionario: { 
+          id_funcionario: this.agendamento.funcionario.id_funcionario,
+          nome: funcionarioSelecionado?.nome || ''
+        },
+        servico: { 
+          id_servico: this.agendamento.servico.id_servico,
+          nome: servicoSelecionado?.nome || ''
+        }
+>>>>>>> d34e3d63a00077e1144e5f4cd58d6988e70fd67d
       };
       
       console.log('Dados sendo enviados:');

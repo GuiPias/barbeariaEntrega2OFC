@@ -11,16 +11,44 @@
     <form (ngSubmit)="cadastrarFuncionario()">
       <div class="form-group">
         <label class="form-label" for="nome">Nome:</label>
+<<<<<<< HEAD
         <input class="form-input" type="text" id="nome" name="nome" [(ngModel)]="funcionario.nome" 
                placeholder="Mínimo 3 letras" minlength="3" required>
         <div *ngIf="erros.nome" class="error-message">{{ erros.nome }}</div>
+=======
+        <input 
+          class="form-input" 
+          [class.error]="erros['nome']"
+          type="text" 
+          id="nome" 
+          name="nome" 
+          [(ngModel)]="funcionario.nome" 
+          placeholder="Digite o nome completo"
+          required>
+        <div *ngIf="erros['nome']" class="error-message">{{ erros['nome'] }}</div>
+>>>>>>> d34e3d63a00077e1144e5f4cd58d6988e70fd67d
       </div>
       
       <div class="form-group">
         <label class="form-label" for="telefone">Telefone:</label>
+<<<<<<< HEAD
         <input class="form-input" type="tel" id="telefone" name="telefone" [(ngModel)]="funcionario.telefone" 
                placeholder="Digite 11 números" maxlength="12" (input)="formatarTelefone($event)" required>
         <div *ngIf="erros.telefone" class="error-message">{{ erros.telefone }}</div>
+=======
+        <input 
+          class="form-input" 
+          [class.error]="erros['telefone']"
+          type="tel" 
+          id="telefone" 
+          name="telefone" 
+          [(ngModel)]="funcionario.telefone" 
+          (input)="formatarTelefone()"
+          placeholder="XX-XXXXXXXXX"
+          maxlength="12"
+          required>
+        <div *ngIf="erros['telefone']" class="error-message">{{ erros['telefone'] }}</div>
+>>>>>>> d34e3d63a00077e1144e5f4cd58d6988e70fd67d
       </div>
       
       <div class="form-group">

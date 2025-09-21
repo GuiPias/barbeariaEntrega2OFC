@@ -11,9 +11,22 @@
     <form (ngSubmit)="cadastrarServico()">
       <div class="form-group">
         <label class="form-label" for="nome">Nome:</label>
+<<<<<<< HEAD
         <input class="form-input" type="text" id="nome" name="nome" [(ngModel)]="servico.nome" 
                placeholder="Mínimo 3 letras" minlength="3" required>
         <div *ngIf="erros.nome" class="error-message">{{ erros.nome }}</div>
+=======
+        <input 
+          class="form-input" 
+          [class.error]="erroNome"
+          type="text" 
+          id="nome" 
+          name="nome" 
+          [(ngModel)]="servico.nome" 
+          placeholder="Digite o nome do serviço"
+          required>
+        <div *ngIf="erroNome" class="error-message">{{ erroNome }}</div>
+>>>>>>> d34e3d63a00077e1144e5f4cd58d6988e70fd67d
       </div>
       
       <div class="form-group">

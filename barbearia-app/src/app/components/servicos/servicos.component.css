@@ -114,6 +114,7 @@
   background-color: #c82333;
 }
 
+<<<<<<< HEAD
 .error-message {
   color: #ff6b6b;
   font-size: 0.875rem;
@@ -122,6 +123,25 @@
   background-color: rgba(255, 107, 107, 0.1);
   border-radius: 0.25rem;
   border-left: 3px solid #ff6b6b;
+=======
+.form-input.error {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.error-message::before {
+  content: '⚠️';
+  font-size: 0.75rem;
+>>>>>>> d34e3d63a00077e1144e5f4cd58d6988e70fd67d
 }
 
 @media (max-width: 768px) {

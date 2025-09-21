@@ -54,6 +54,7 @@
   color: #a0aec0;
   margin: 0.5rem 0;
   font-size: 0.875rem;
+  word-break: break-word;
 }
 
 .form-actions {
@@ -114,6 +115,7 @@
   background-color: #c82333;
 }
 
+<<<<<<< HEAD
 .error-message {
   color: #ff6b6b;
   font-size: 0.875rem;
@@ -122,6 +124,51 @@
   background-color: rgba(255, 107, 107, 0.1);
   border-radius: 0.25rem;
   border-left: 3px solid #ff6b6b;
+=======
+/* Estilos para validação */
+.form-input.error {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.error-message::before {
+  content: '⚠️';
+  font-size: 0.75rem;
+}
+
+.validation-summary {
+  background-color: rgba(220, 53, 69, 0.1);
+  border: 1px solid #dc3545;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.validation-summary h4 {
+  color: #dc3545;
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+}
+
+.validation-summary ul {
+  margin: 0;
+  padding-left: 1.5rem;
+  color: #dc3545;
+}
+
+.validation-summary li {
+  margin-bottom: 0.25rem;
+  font-size: 0.875rem;
+>>>>>>> d34e3d63a00077e1144e5f4cd58d6988e70fd67d
 }
 
 @media (max-width: 768px) {

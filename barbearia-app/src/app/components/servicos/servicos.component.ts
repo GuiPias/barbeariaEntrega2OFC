@@ -21,6 +21,7 @@ export class ServicosComponent implements OnInit {
   };
   
   servicos: Servico[] = [];
+<<<<<<< HEAD
   
   erros = {
     nome: '',
@@ -28,6 +29,9 @@ export class ServicosComponent implements OnInit {
     preco: '',
     duracaoMinutos: ''
   };
+=======
+  erroNome = '';
+>>>>>>> d34e3d63a00077e1144e5f4cd58d6988e70fd67d
 
   constructor(private servicoService: ServicoService) {}
   
@@ -43,7 +47,18 @@ export class ServicosComponent implements OnInit {
   }
   
   cadastrarServico() {
+<<<<<<< HEAD
     if (this.validarFormulario()) {
+=======
+    this.erroNome = '';
+    
+    if (!this.servico.nome || this.servico.nome.trim().length < 3) {
+      this.erroNome = 'Nome deve ter pelo menos 3 caracteres';
+      return;
+    }
+    
+    if (this.servico.nome && this.servico.descricao && this.servico.preco) {
+>>>>>>> d34e3d63a00077e1144e5f4cd58d6988e70fd67d
       if (this.editandoServico && this.servicoEditandoId) {
         this.servicoService.update(this.servicoEditandoId, this.servico).subscribe({
           next: () => {
@@ -102,7 +117,11 @@ export class ServicosComponent implements OnInit {
     this.editandoServico = false;
     this.servicoEditandoId = undefined;
     this.servico = { nome: '', descricao: '', preco: 0, duracaoMinutos: 0 };
+<<<<<<< HEAD
     this.limparErros();
+=======
+    this.erroNome = '';
+>>>>>>> d34e3d63a00077e1144e5f4cd58d6988e70fd67d
     this.mostrarFormulario = false;
   }
 
