@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ClienteService } from '../../services/cliente/cliente.service';
+import { Cliente } from '../../model/clientes/cliente.model';
 
 @Component({
   selector: 'app-clientes',
@@ -6,54 +8,93 @@ import { Component } from '@angular/core';
   templateUrl: './clientes.component.html',
   styleUrls: ['./clientes.component.css']
 })
-export class ClientesComponent {
+export class ClientesComponent implements OnInit {
   mostrarFormulario = false;
   editandoCliente = false;
-  clienteEditandoIndex = -1;
+  clienteEditandoId?: number;
   
-  cliente = {
+  cliente: Cliente = {
     nome: '',
     celular: '',
     email: '',
-    idade: null
+    idade: 0
   };
   
-  clientes: any[] = [];
+  clientes: Cliente[] = [];
+
+  constructor(private clienteService: ClienteService) {}
   
+  ngOnInit() {
+    this.carregarClientes();
+  }
+
+  carregarClientes() {
+    this.clienteService.findAll().subscribe({
+      next: (clientes) => this.clientes = clientes,
+      error: (error) => console.error('Erro ao carregar clientes:', error)
+    });
+  }
+
   cadastrarCliente() {
     if (this.cliente.nome && this.cliente.celular && this.cliente.email && this.cliente.idade) {
-      if (this.editandoCliente) {
-        this.clientes[this.clienteEditandoIndex] = { ...this.cliente };
-        this.editandoCliente = false;
-        this.clienteEditandoIndex = -1;
-        alert('Cliente atualizado com sucesso!');
+      if (this.editandoCliente && this.clienteEditandoId) {
+        this.clienteService.update(this.clienteEditandoId, this.cliente).subscribe({
+          next: () => {
+            alert('Cliente atualizado com sucesso!');
+            this.resetForm();
+            this.carregarClientes();
+          },
+          error: (error) => {
+            console.error('Erro ao atualizar cliente:', error);
+            alert('Erro ao atualizar cliente!');
+          }
+        });
       } else {
-        this.clientes.push({ ...this.cliente });
-        alert('Cliente cadastrado com sucesso!');
+        this.clienteService.save(this.cliente).subscribe({
+          next: () => {
+            alert('Cliente cadastrado com sucesso!');
+            this.resetForm();
+            this.carregarClientes();
+          },
+          error: (error) => {
+            console.error('Erro ao cadastrar cliente:', error);
+            alert('Erro ao cadastrar cliente!');
+          }
+        });
       }
-      this.cliente = { nome: '', celular: '', email: '', idade: null };
-      this.mostrarFormulario = false;
     }
   }
   
-  editarCliente(index: number) {
-    this.cliente = { ...this.clientes[index] };
+  editarCliente(cliente: Cliente) {
+    this.cliente = { ...cliente };
     this.editandoCliente = true;
-    this.clienteEditandoIndex = index;
+    this.clienteEditandoId = cliente.id_cliente;
     this.mostrarFormulario = true;
   }
   
-  deletarCliente(index: number) {
-    if (confirm('Tem certeza que deseja deletar este cliente?')) {
-      this.clientes.splice(index, 1);
-      alert('Cliente deletado com sucesso!');
+  deletarCliente(cliente: Cliente) {
+    if (confirm('Tem certeza que deseja deletar este cliente?') && cliente.id_cliente) {
+      this.clienteService.deleteById(cliente.id_cliente).subscribe({
+        next: () => {
+          alert('Cliente deletado com sucesso!');
+          this.carregarClientes();
+        },
+        error: (error) => {
+          console.error('Erro ao deletar cliente:', error);
+          alert('Erro ao deletar cliente!');
+        }
+      });
     }
   }
   
   cancelarEdicao() {
+    this.resetForm();
+  }
+
+  private resetForm() {
     this.editandoCliente = false;
-    this.clienteEditandoIndex = -1;
-    this.cliente = { nome: '', celular: '', email: '', idade: null };
+    this.clienteEditandoId = undefined;
+    this.cliente = { nome: '', celular: '', email: '', idade: 0 };
     this.mostrarFormulario = false;
   }
 }

@@ -37,7 +37,7 @@
   </div>
 
   <div class="clientes-grid">
-    <div *ngFor="let c of clientes; let i = index" class="cliente-card card fade-in-up">
+    <div *ngFor="let c of clientes" class="cliente-card card fade-in-up">
       <div class="cliente-avatar">👤</div>
       <h4>{{ c.nome }}</h4>
       <div class="cliente-info">
@@ -46,8 +46,8 @@
         <p>🎂 {{ c.idade }} anos</p>
       </div>
       <div class="cliente-actions">
-        <button class="btn btn-edit" (click)="editarCliente(i)">✏️ Editar</button>
-        <button class="btn btn-delete" (click)="deletarCliente(i)">🗑️ Deletar</button>
+        <button class="btn btn-edit" (click)="editarCliente(c)">✏️ Editar</button>
+        <button class="btn btn-delete" (click)="deletarCliente(c)">🗑️ Deletar</button>
       </div>
     </div>
   </div>
