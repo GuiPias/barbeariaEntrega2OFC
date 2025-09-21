@@ -21,6 +21,8 @@ export class ClientesComponent implements OnInit {
   };
   
   clientes: Cliente[] = [];
+  erros: { [key: string]: string } = {};
+  Object = Object;
 
   constructor(private clienteService: ClienteService) {}
   
@@ -35,8 +37,55 @@ export class ClientesComponent implements OnInit {
     });
   }
 
+  validarFormulario(): boolean {
+    this.erros = {};
+    let valido = true;
+
+    // Validação do nome
+    if (!this.cliente.nome || this.cliente.nome.trim().length < 3) {
+      this.erros['nome'] = 'Nome deve ter pelo menos 3 caracteres';
+      valido = false;
+    }
+
+    // Validação do celular
+    const celularLimpo = this.cliente.celular.replace(/\D/g, '');
+    if (!this.cliente.celular) {
+      this.erros['celular'] = 'Celular é obrigatório';
+      valido = false;
+    } else if (celularLimpo.length !== 11) {
+      this.erros['celular'] = 'Celular deve ter 11 dígitos (XX-XXXXXXXXX)';
+      valido = false;
+    }
+
+    // Validação do email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!this.cliente.email) {
+      this.erros['email'] = 'Email é obrigatório';
+      valido = false;
+    } else if (!emailRegex.test(this.cliente.email)) {
+      this.erros['email'] = 'Email deve ter um formato válido';
+      valido = false;
+    }
+
+    // Validação da idade
+    if (!this.cliente.idade || this.cliente.idade < 1 || this.cliente.idade > 120) {
+      this.erros['idade'] = 'Idade deve ser entre 1 e 120 anos';
+      valido = false;
+    }
+
+    return valido;
+  }
+
+  formatarCelular() {
+    let celular = this.cliente.celular.replace(/\D/g, '');
+    if (celular.length <= 11) {
+      celular = celular.replace(/(\d{2})(\d{5})(\d{4})/, '$1-$2$3');
+      this.cliente.celular = celular;
+    }
+  }
+
   cadastrarCliente() {
-    if (this.cliente.nome && this.cliente.celular && this.cliente.email && this.cliente.idade) {
+    if (this.validarFormulario()) {
       if (this.editandoCliente && this.clienteEditandoId) {
         this.clienteService.update(this.clienteEditandoId, this.cliente).subscribe({
           next: () => {
@@ -95,6 +144,7 @@ export class ClientesComponent implements OnInit {
     this.editandoCliente = false;
     this.clienteEditandoId = undefined;
     this.cliente = { nome: '', celular: '', email: '', idade: 0 };
+    this.erros = {};
     this.mostrarFormulario = false;
   }
 }

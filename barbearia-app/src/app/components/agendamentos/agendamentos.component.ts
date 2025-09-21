@@ -77,12 +77,25 @@ export class AgendamentosComponent implements OnInit {
   cadastrarAgendamento() {
     if (this.agendamento.cliente && this.agendamento.funcionario && this.agendamento.servico && this.agendamento.dataHora) {
 
+      const clienteSelecionado = this.clientes.find(c => c.id_cliente === this.agendamento.cliente.id_cliente);
+      const funcionarioSelecionado = this.funcionarios.find(f => f.id_funcionario === this.agendamento.funcionario.id_funcionario);
+      const servicoSelecionado = this.servicos.find(s => s.id_servico === this.agendamento.servico.id_servico);
+
       const agendamentoData = {
         dataHora: this.agendamento.dataHora + ':00',
         observacoes: this.agendamento.observacoes || '',
-        cliente: { id_cliente: this.agendamento.cliente.id_cliente },
-        funcionario: { id_funcionario: this.agendamento.funcionario.id_funcionario },
-        servico: { id_servico: this.agendamento.servico.id_servico }
+        cliente: { 
+          id_cliente: this.agendamento.cliente.id_cliente,
+          nome: clienteSelecionado?.nome || ''
+        },
+        funcionario: { 
+          id_funcionario: this.agendamento.funcionario.id_funcionario,
+          nome: funcionarioSelecionado?.nome || ''
+        },
+        servico: { 
+          id_servico: this.agendamento.servico.id_servico,
+          nome: servicoSelecionado?.nome || ''
+        }
       };
 
       

@@ -11,27 +11,74 @@
     <form (ngSubmit)="cadastrarCliente()">
       <div class="form-group">
         <label class="form-label" for="nome">Nome:</label>
-        <input class="form-input" type="text" id="nome" name="nome" [(ngModel)]="cliente.nome" required>
+        <input 
+          class="form-input" 
+          [class.error]="erros['nome']"
+          type="text" 
+          id="nome" 
+          name="nome" 
+          [(ngModel)]="cliente.nome" 
+          placeholder="Digite o nome completo"
+          required>
+        <div *ngIf="erros['nome']" class="error-message">{{ erros['nome'] }}</div>
       </div>
       
       <div class="form-group">
         <label class="form-label" for="celular">Celular:</label>
-        <input class="form-input" type="tel" id="celular" name="celular" [(ngModel)]="cliente.celular" required>
+        <input 
+          class="form-input" 
+          [class.error]="erros['celular']"
+          type="tel" 
+          id="celular" 
+          name="celular" 
+          [(ngModel)]="cliente.celular" 
+          (input)="formatarCelular()"
+          placeholder="XX-XXXXXXXXX"
+          maxlength="12"
+          required>
+        <div *ngIf="erros['celular']" class="error-message">{{ erros['celular'] }}</div>
       </div>
       
       <div class="form-group">
         <label class="form-label" for="email">Email:</label>
-        <input class="form-input" type="email" id="email" name="email" [(ngModel)]="cliente.email" required>
+        <input 
+          class="form-input" 
+          [class.error]="erros['email']"
+          type="email" 
+          id="email" 
+          name="email" 
+          [(ngModel)]="cliente.email" 
+          placeholder="exemplo@email.com"
+          required>
+        <div *ngIf="erros['email']" class="error-message">{{ erros['email'] }}</div>
       </div>
       
       <div class="form-group">
         <label class="form-label" for="idade">Idade:</label>
-        <input class="form-input" type="number" id="idade" name="idade" [(ngModel)]="cliente.idade" required>
+        <input 
+          class="form-input" 
+          [class.error]="erros['idade']"
+          type="number" 
+          id="idade" 
+          name="idade" 
+          [(ngModel)]="cliente.idade" 
+          min="1" 
+          max="120"
+          placeholder="Digite a idade"
+          required>
+        <div *ngIf="erros['idade']" class="error-message">{{ erros['idade'] }}</div>
       </div>
       
       <div class="form-actions">
         <button type="submit" class="btn btn-primary">{{ editandoCliente ? '✏️ Atualizar' : '💾 Salvar' }} Cliente</button>
         <button type="button" class="btn btn-secondary" (click)="cancelarEdicao()">❌ Cancelar</button>
+      </div>
+      
+      <div *ngIf="Object.keys(erros).length > 0" class="validation-summary">
+        <h4>⚠️ Corrija os seguintes erros:</h4>
+        <ul>
+          <li *ngFor="let erro of Object.values(erros)">{{ erro }}</li>
+        </ul>
       </div>
     </form>
   </div>
